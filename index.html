@@ -10,7 +10,8 @@
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button.add-btn { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; }
+        button.add-btn { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s;}
+        button.add-btn:disabled { background: #9ca3af; cursor: not-allowed; }
         
         /* Estilos da Lista */
         .link-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; gap: 15px; }
@@ -18,7 +19,9 @@
         .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; }
         .name-link.sold { color: #f97316; } /* Laranja para vendido */
         .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 2px 8px; border-radius: 4px; cursor: pointer; user-select: none; }
-        .btn-delete { background: #ef4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; flex-shrink: 0; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; flex-shrink: 0; transition: 0.2s;}
+        .btn-delete:hover { background: #dc2626; }
+        .loading-text { font-style: italic; color: #666; }
     </style>
 </head>
 <body>
@@ -28,87 +31,187 @@
     <form id="link-form">
         <div class="form-group">
             <label>Nome da Página</label>
-            <input type="text" id="name-input" required>
+            <input type="text" id="name-input" placeholder="Ex: Lyon Salão" required>
         </div>
         <div class="form-group">
             <label>Categoria</label>
-            <input type="text" id="category-input" list="cats" required>
+            <input type="text" id="category-input" list="cats" placeholder="Selecione na lista ou digite..." required>
             <datalist id="cats"></datalist>
         </div>
         <div class="form-group">
             <label>Link (URL)</label>
-            <input type="url" id="url-input" required>
+            <input type="url" id="url-input" placeholder="https://..." required>
         </div>
         <div class="form-group">
-            <label><input type="checkbox" id="sold-checkbox" style="width: auto;"> Marcar como vendido agora?</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
+                <input type="checkbox" id="sold-checkbox" style="width: auto;"> 
+                Marcar como vendido agora?
+            </label>
         </div>
-        <button type="submit" class="add-btn">Adicionar</button>
+        <button type="submit" class="add-btn" id="submit-btn">Adicionar</button>
     </form>
-    <hr style="margin: 20px 0;">
+    
+    <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+    
     <h2>Links Salvos</h2>
-    <div id="links-list">Carregando...</div>
+    <div id="links-list"><span class="loading-text">Carregando seus links...</span></div>
 </div>
 
 <script>
-    // --- COLE O SEU LINK DO SHEETDB AQUI ABAIXO ---
+    // --- ATENÇÃO: COLE O SEU LINK DO SHEETDB AQUI DENTRO DAS ASPAS ---
     const API_URL = "https://sheetdb.io/api/v1/9wia5qcdhjpv9"; 
-    // ----------------------------------------------
+    // -----------------------------------------------------------------
 
-    const categorias = ["Academia", "Açougue", "Adega", "Agência de viagens", "Alfaiataria", "Antiquário", "Armarinho", "Assistência técnica de celulares", "Assistência técnica de eletrodomésticos", "Autoelétrica", "Autoescola", "Autopeças", "Banca de revistas", "Bar", "Barbearia", "Bazar", "Bicicletaria", "Borracharia", "Brechó", "Cafeteria", "Calçados", "Carrinho de cachorro-quente", "Casa de carnes", "Casa de câmbio", "Casa de construção", "Chaveiro", "Clínica de estética", "Clínica médica", "Clínica odontológica", "Clínica veterinária", "Confeitaria", "Concessionária de veículos", "Conveniência", "Copiadora e gráfica rápida", "Corretora de seguros", "Costureira", "Cozinha industrial", "Curso de idiomas", "Decoração e design de interiores", "Depósito de bebidas", "Despachante", "Doceria", "Drogaria", "Eletrodomésticos", "Eletrônicos", "Escola de artes", "Escola de música", "Escritório de advocacia", "Escritório de contabilidade", "Estacionamento", "Estúdio de pilates", "Estúdio de tatuagem", "Farmácia", "Farmácia de manipulação", "Ferragens", "Floricultura", "Fruteira e hortifruti", "Funilaria e pintura", "Galeria de arte", "Hamburgueria", "Hotel", "Imobiliária", "Informática", "Joalheria", "Lanchonete", "Lava-jato", "Lavanderia", "Livraria", "Loja de antiguidades", "Loja de artesanato", "Loja de artigos religiosos", "Loja de brinquedos", "Loja de colchões", "Loja de departamentos", "Loja de esportes", "Loja de ferramentas", "Loja de games", "Loja de instrumentos musicais", "Loja de jardinagem", "Loja de móveis", "Loja de parafusos", "Loja de pesca", "Loja de pneus", "Loja de presentes", "Loja de produtos naturais", "Loja de roupas", "Loja de suplementos", "Loja de variedades", "Loja de vinhos", "Madeireira", "Manicure e pedicure", "Marcenaria", "Marmoraria", "Mecânica automotiva", "Mercado", "Mercearia", "Moda íntima", "Móveis planejados", "Oficina de motos", "Ótica", "Padaria", "Papelaria", "Pastelaria", "Peixaria", "Perfumaria", "Pet shop", "Pizzaria", "Posto de combustível", "Pousada", "Pronto-socorro", "Relojoaria", "Restaurante a quilo", "Restaurante à la carte", "Restaurante japonês", "Restaurante vegetariano", "Rotisseria", "Salão de beleza", "Sapataria", "Sebo (livros usados)", "Serralheria", "Shopping center", "Sorveteria", "Supermercado", "Tabacaria", "Tapeçaria", "Teatro", "Tintas", "Transportadora", "Vidraçaria"];
+    const categorias =[
+        "Academia", "Açougue", "Adega", "Agência de viagens", "Alfaiataria", "Antiquário", "Armarinho", 
+        "Assistência técnica de celulares", "Assistência técnica de eletrodomésticos", "Autoelétrica", 
+        "Autoescola", "Autopeças", "Banca de revistas", "Bar", "Barbearia", "Bazar", "Bicicletaria", 
+        "Borracharia", "Brechó", "Cafeteria", "Calçados", "Carrinho de cachorro-quente", "Casa de carnes", 
+        "Casa de câmbio", "Casa de construção", "Chaveiro", "Clínica de estética", "Clínica médica", 
+        "Clínica odontológica", "Clínica veterinária", "Concessionária de veículos", "Confeitaria", 
+        "Conveniência", "Copiadora e gráfica rápida", "Corretora de seguros", "Costureira", "Cozinha industrial", 
+        "Curso de idiomas", "Decoração e design de interiores", "Depósito de bebidas", "Despachante", 
+        "Doceria", "Drogaria", "Eletrodomésticos", "Eletrônicos", "Escola de artes", "Escola de música", 
+        "Escritório de advocacia", "Escritório de contabilidade", "Estacionamento", "Estúdio de pilates", 
+        "Estúdio de tatuagem", "Farmácia", "Farmácia de manipulação", "Ferragens", "Floricultura", 
+        "Fruteira e hortifruti", "Funilaria e pintura", "Galeria de arte", "Hamburgueria", "Hotel", 
+        "Imobiliária", "Informática", "Joalheria", "Lanchonete", "Lava-jato", "Lavanderia", "Livraria", 
+        "Loja de antiguidades", "Loja de artesanato", "Loja de artigos religiosos", "Loja de brinquedos", 
+        "Loja de colchões", "Loja de departamentos", "Loja de esportes", "Loja de ferramentas", 
+        "Loja de games", "Loja de instrumentos musicais", "Loja de jardinagem", "Loja de móveis", 
+        "Loja de parafusos", "Loja de pesca", "Loja de pneus", "Loja de presentes", "Loja de produtos naturais", 
+        "Loja de roupas", "Loja de suplementos", "Loja de variedades", "Loja de vinhos", "Madeireira", 
+        "Manicure e pedicure", "Marcenaria", "Marmoraria", "Mecânica automotiva", "Mercado", "Mercearia", 
+        "Moda íntima", "Móveis planejados", "Oficina de motos", "Ótica", "Padaria", "Papelaria", 
+        "Pastelaria", "Peixaria", "Perfumaria", "Pet shop", "Pizzaria", "Posto de combustível", "Pousada", 
+        "Pronto-socorro", "Relojoaria", "Restaurante a quilo", "Restaurante japonês", "Restaurante vegetariano", 
+        "Restaurante à la carte", "Rotisseria", "Salão de beleza", "Sapataria", "Sebo (livros usados)", 
+        "Serralheria", "Shopping center", "Sorveteria", "Supermercado", "Tabacaria", "Tapeçaria", "Teatro", 
+        "Tintas", "Transportadora", "Vidraçaria"
+    ];
 
+    // Preenche a lista de categorias
     const datalist = document.getElementById('cats');
-    categorias.forEach(c => { const opt = document.createElement('option'); opt.value = c; datalist.appendChild(opt); });
+    categorias.forEach(c => { 
+        const opt = document.createElement('option'); 
+        opt.value = c; 
+        datalist.appendChild(opt); 
+    });
 
     const form = document.getElementById('link-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const listContainer = document.getElementById('links-list');
     
+    // Função para buscar os links na planilha
     async function loadLinks() {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        render(data);
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            render(data);
+        } catch (error) {
+            listContainer.innerHTML = '<span style="color: red;">Erro ao carregar. Verifique se colou a URL do SheetDB corretamente no código.</span>';
+        }
     }
 
+    // Adiciona o link e GERA O ID ÚNICO
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        submitBtn.textContent = "Adicionando...";
+        submitBtn.disabled = true;
+
         const data = {
+            id: "ID-" + Date.now(), // <-- ISSO RESOLVE O PROBLEMA! Gera um ID exclusivo.
             name: document.getElementById('name-input').value,
             category: document.getElementById('category-input').value,
             url: document.getElementById('url-input').value,
             sold: document.getElementById('sold-checkbox').checked ? "TRUE" : "FALSE"
         };
-        await fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({data: [data]}) });
-        form.reset();
-        loadLinks();
+
+        try {
+            await fetch(API_URL, { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({data:[data]}) 
+            });
+            form.reset();
+            await loadLinks();
+        } catch (error) {
+            alert("Erro ao adicionar. Tente novamente.");
+        } finally {
+            submitBtn.textContent = "Adicionar";
+            submitBtn.disabled = false;
+        }
     });
 
-    async function toggleSold(id, currentStatus) {
+    // Alternar Vendido
+    window.toggleSold = async function(id, currentStatus) {
+        // Exibe um alerta de carregamento simples mudando o mouse ou visual
+        document.body.style.cursor = "wait";
         const newStatus = currentStatus === "TRUE" ? "FALSE" : "TRUE";
-        await fetch(`${API_URL}/id/${id}`, { method: 'PATCH', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sold: newStatus}) });
-        loadLinks();
-    }
+        
+        try {
+            await fetch(`${API_URL}/id/${id}`, { 
+                method: 'PATCH', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({sold: newStatus}) 
+            });
+            await loadLinks();
+        } catch (error) {
+            alert("Erro ao atualizar status.");
+        } finally {
+            document.body.style.cursor = "default";
+        }
+    };
 
-    async function deleteLink(id) {
-        await fetch(`${API_URL}/id/${id}`, { method: 'DELETE' });
-        loadLinks();
-    }
+    // Deletar
+    window.deleteLink = async function(id) {
+        if(!confirm("Tem certeza que deseja excluir?")) return;
+        
+        document.body.style.cursor = "wait";
+        try {
+            await fetch(`${API_URL}/id/${id}`, { method: 'DELETE' });
+            await loadLinks();
+        } catch (error) {
+            alert("Erro ao excluir.");
+        } finally {
+            document.body.style.cursor = "default";
+        }
+    };
 
+    // Mostrar os itens na tela
     function render(data) {
-        const list = document.getElementById('links-list');
-        list.innerHTML = '';
+        listContainer.innerHTML = '';
+        
+        // Verifica se a planilha retornou um erro (ex: limite da API ou erro de sintaxe)
+        if(data.error) {
+            listContainer.innerHTML = '<span class="loading-text">Erro na API ou a planilha está vazia.</span>';
+            return;
+        }
+
+        if (data.length === 0) {
+            listContainer.innerHTML = '<span class="loading-text">Nenhuma página salva ainda.</span>';
+            return;
+        }
+
         data.forEach(item => {
+            // Previne falha caso haja linhas na planilha em branco
+            if(!item.name && !item.url) return; 
+
             const isSold = item.sold === "TRUE";
             const div = document.createElement('div');
             div.className = 'link-item';
             div.innerHTML = `
                 <div class="left-side">
                     <a href="${item.url}" target="_blank" class="name-link ${isSold ? 'sold' : ''}">${item.name}</a>
-                    <span class="category-tag" onclick="toggleSold('${item.id}', '${item.sold}')">${item.category}</span>
+                    <span class="category-tag" onclick="toggleSold('${item.id}', '${item.sold}')" title="Clique para alterar para ${isSold ? 'Ativo' : 'Vendido'}">${item.category}</span>
                 </div>
                 <button class="btn-delete" onclick="deleteLink('${item.id}')">Excluir</button>
             `;
-            list.appendChild(div);
+            listContainer.appendChild(div);
         });
     }
 
+    // Chama a função assim que abrir a página
     loadLinks();
 </script>
 </body>
