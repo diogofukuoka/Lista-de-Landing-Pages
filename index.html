@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Pages</title>
+    <title>Minhas Landing Pages</title>
     
     <style>
         /* Reset básico */
@@ -56,7 +56,8 @@
         }
         
         input[type="text"]:focus, 
-        input[type="url"]:focus {
+        input[type="url"]:focus,
+        select:focus {
             border-color: #2563eb;
         }
         
@@ -99,22 +100,6 @@
             background-color: #eff6ff;
             color: #1d4ed8;
         }
-
-        .checkbox-container {
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            font-weight: normal; 
-            cursor: pointer; 
-            font-size: 15px;
-            padding: 5px 0;
-        }
-        
-        input[type="checkbox"] { 
-            width: 22px; 
-            height: 22px; 
-            flex-shrink: 0;
-        }
         
         button.add-btn { 
             background: #2563eb; 
@@ -137,9 +122,15 @@
         
         .link-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f3f4f6; gap: 12px; }
         .left-side { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1; }
-        .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; word-break: break-word; }
-        .name-link.sold { color: #f97316; } 
-        .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 4px 10px; border-radius: 6px; cursor: pointer; user-select: none; white-space: nowrap; }
+        
+        /* Cores dos Links */
+        .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; word-break: break-word; transition: color 0.3s; }
+        .name-link.green { color: #16a34a; } /* Verde */
+        .name-link.gold { color: #d97706; }  /* Dourado */
+        
+        .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 4px 10px; border-radius: 6px; cursor: pointer; user-select: none; white-space: nowrap; transition: 0.2s;}
+        .category-tag:hover { background: #d1d5db; }
+        
         .btn-delete { background: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; flex-shrink: 0; transition: 0.2s; }
         .btn-delete:hover { background: #dc2626; }
         .loading-text { font-style: italic; color: #6b7280; font-size: 15px; }
@@ -157,7 +148,7 @@
 <body>
 
 <div class="container">
-    <h1>Landing Pages</h1>
+    <h1>Minhas Landing Pages</h1>
     
     <form id="link-form">
         <div class="form-group">
@@ -167,7 +158,6 @@
         
         <div class="form-group dropdown-container">
             <label>Categoria</label>
-            <!-- O autocomplete="off" evita que o teclado se sobreponha à nossa lista -->
             <input type="text" id="category-input" placeholder="Selecione na lista ou digite..." required autocomplete="off">
             <div id="category-dropdown" class="custom-dropdown"></div>
         </div>
@@ -178,10 +168,12 @@
         </div>
         
         <div class="form-group">
-            <label class="checkbox-container">
-                <input type="checkbox" id="sold-checkbox"> 
-                Marcar como vendido agora?
-            </label>
+            <label>Cor / Status Inicial</label>
+            <select id="status-input">
+                <option value="NORMAL">Normal (Azul)</option>
+                <option value="GREEN">Verde (1º Clique)</option>
+                <option value="GOLD">Dourado (2º Clique)</option>
+            </select>
         </div>
         
         <button type="submit" class="add-btn" id="submit-btn">Adicionar</button>
@@ -234,7 +226,6 @@
         categoryDropdown.innerHTML = '';
         const lowerFilter = filterText.toLowerCase();
         
-        // Filtra as categorias que contêm o que foi digitado
         const filtered = categorias.filter(c => c.toLowerCase().includes(lowerFilter));
         
         if (filtered.length === 0) {
@@ -247,7 +238,6 @@
             div.className = 'dropdown-item';
             div.textContent = c;
             
-            // Quando clica no item da lista
             div.addEventListener('click', () => {
                 categoryInput.value = c;
                 categoryDropdown.classList.remove('show');
@@ -259,11 +249,9 @@
         categoryDropdown.classList.add('show');
     }
 
-    // Eventos do campo de Categoria
     categoryInput.addEventListener('focus', () => renderDropdown(categoryInput.value));
     categoryInput.addEventListener('input', (e) => renderDropdown(e.target.value));
 
-    // Fecha o menu suspenso ao clicar fora dele
     document.addEventListener('click', (e) => {
         if (!categoryInput.contains(e.target) && !categoryDropdown.contains(e.target)) {
             categoryDropdown.classList.remove('show');
@@ -295,7 +283,7 @@
             name: document.getElementById('name-input').value,
             category: categoryInput.value,
             url: document.getElementById('url-input').value,
-            sold: document.getElementById('sold-checkbox').checked ? "TRUE" : "FALSE"
+            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN ou GOLD
         };
 
         try {
@@ -305,7 +293,7 @@
                 body: JSON.stringify({data:[data]}) 
             });
             form.reset();
-            categoryDropdown.classList.remove('show'); // Esconde a lista após salvar
+            categoryDropdown.classList.remove('show');
             await loadLinks();
         } catch (error) {
             alert("Erro ao adicionar. Tente novamente.");
@@ -315,9 +303,15 @@
         }
     });
 
-    window.toggleSold = async function(id, currentStatus) {
+    // Função que alterna entre as 3 cores
+    window.toggleStatus = async function(id, currentStatus) {
         document.body.style.cursor = "wait";
-        const newStatus = currentStatus === "TRUE" ? "FALSE" : "TRUE";
+        
+        // Define a próxima cor na sequência
+        let newStatus = "GREEN"; 
+        if (currentStatus === "NORMAL" || currentStatus === "FALSE") newStatus = "GREEN";
+        else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "GOLD";
+        else if (currentStatus === "GOLD") newStatus = "NORMAL";
         
         try {
             await fetch(`${API_URL}/id/${id}`, { 
@@ -363,13 +357,19 @@
         data.forEach(item => {
             if(!item.name && !item.url) return; 
 
-            const isSold = item.sold === "TRUE";
+            const status = item.sold || "NORMAL";
+            
+            // Define qual classe de cor aplicar baseada no status
+            let colorClass = "";
+            if (status === "GREEN" || status === "TRUE") colorClass = "green";
+            if (status === "GOLD") colorClass = "gold";
+
             const div = document.createElement('div');
             div.className = 'link-item';
             div.innerHTML = `
                 <div class="left-side">
-                    <a href="${item.url}" target="_blank" class="name-link ${isSold ? 'sold' : ''}">${item.name}</a>
-                    <span class="category-tag" onclick="toggleSold('${item.id}', '${item.sold}')" title="Clique para alterar status">${item.category}</span>
+                    <a href="${item.url}" target="_blank" class="name-link ${colorClass}">${item.name}</a>
+                    <span class="category-tag" onclick="toggleStatus('${item.id}', '${status}')" title="Clique para mudar a cor">${item.category}</span>
                 </div>
                 <button class="btn-delete" onclick="deleteLink('${item.id}')">Excluir</button>
             `;
