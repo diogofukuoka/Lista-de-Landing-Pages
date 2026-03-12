@@ -2,56 +2,199 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <!-- ESTA É A LINHA MÁGICA QUE RESOLVE O PROBLEMA NO CELULAR -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minhas Landing Pages</title>
+    
     <style>
-        body { font-family: sans-serif; background-color: #f3f4f6; padding: 20px; color: #333; }
-        .container { max-width: 700px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #1e40af; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button.add-btn { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s;}
+        /* Reset básico */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f3f4f6; 
+            padding: 15px; 
+            color: #333; 
+        }
+        
+        .container { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+        
+        h1 { 
+            color: #1e40af; 
+            font-size: 22px; 
+            margin-bottom: 20px; 
+            text-align: center;
+        }
+        
+        .form-group { margin-bottom: 16px; }
+        
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            font-size: 14px; 
+            color: #4b5563;
+        }
+        
+        /* Inputs maiores para não dar zoom no celular e facilitar o toque */
+        input[type="text"], 
+        input[type="url"], 
+        select { 
+            width: 100%; 
+            padding: 12px 14px; 
+            border: 1px solid #d1d5db; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        input[type="text"]:focus, 
+        input[type="url"]:focus {
+            border-color: #2563eb;
+        }
+        
+        .checkbox-container {
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-weight: normal; 
+            cursor: pointer; 
+            font-size: 15px;
+            padding: 5px 0;
+        }
+        
+        input[type="checkbox"] { 
+            width: 22px; 
+            height: 22px; 
+            flex-shrink: 0;
+        }
+        
+        button.add-btn { 
+            background: #2563eb; 
+            color: white; 
+            padding: 14px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold; 
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        
+        button.add-btn:hover { background: #1d4ed8; }
         button.add-btn:disabled { background: #9ca3af; cursor: not-allowed; }
         
-        /* Estilos da Lista */
-        .link-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; gap: 15px; }
-        .left-side { display: flex; align-items: center; gap: 10px; }
-        .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; }
-        .name-link.sold { color: #f97316; } /* Laranja para vendido */
-        .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 2px 8px; border-radius: 4px; cursor: pointer; user-select: none; }
-        .btn-delete { background: #ef4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; flex-shrink: 0; transition: 0.2s;}
+        hr { border: 0; border-top: 1px solid #e5e7eb; margin: 25px 0; }
+        h2 { font-size: 18px; color: #1f2937; margin-bottom: 15px; }
+        
+        /* Estilos da Lista - Adaptados para quebrar linha se não couber na tela */
+        .link-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 16px 0; 
+            border-bottom: 1px solid #f3f4f6; 
+            gap: 12px; 
+        }
+        
+        .left-side { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            flex-wrap: wrap; /* Permite que a categoria vá para baixo se a tela for muito fina */
+            flex: 1;
+        }
+        
+        .name-link { 
+            text-decoration: none; 
+            color: #1e40af; 
+            font-weight: bold; 
+            font-size: 16px; 
+            word-break: break-word; /* Evita que nomes gigantes quebrem o layout */
+        }
+        
+        .name-link.sold { color: #f97316; } 
+        
+        .category-tag { 
+            font-size: 12px; 
+            color: #4b5563; 
+            background: #e5e7eb; 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            user-select: none; 
+            white-space: nowrap;
+        }
+        
+        .btn-delete { 
+            background: #ef4444; 
+            color: white; 
+            border: none; 
+            padding: 8px 14px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            font-weight: bold;
+            flex-shrink: 0; 
+            transition: 0.2s;
+        }
+        
         .btn-delete:hover { background: #dc2626; }
-        .loading-text { font-style: italic; color: #666; }
+        .loading-text { font-style: italic; color: #6b7280; font-size: 15px; }
+
+        /* Ajustes para telas maiores (Tablets e Computadores) */
+        @media (min-width: 600px) {
+            body { padding: 30px; }
+            .container { padding: 35px; }
+            h1 { font-size: 26px; text-align: left; }
+            h2 { font-size: 20px; }
+            .link-item { flex-wrap: nowrap; padding: 12px 0; }
+            .left-side { flex-wrap: nowrap; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Minhas Landing Pages</h1>
+    
     <form id="link-form">
         <div class="form-group">
             <label>Nome da Página</label>
             <input type="text" id="name-input" placeholder="Ex: Lyon Salão" required>
         </div>
+        
         <div class="form-group">
             <label>Categoria</label>
             <input type="text" id="category-input" list="cats" placeholder="Selecione na lista ou digite..." required>
             <datalist id="cats"></datalist>
         </div>
+        
         <div class="form-group">
             <label>Link (URL)</label>
             <input type="url" id="url-input" placeholder="https://..." required>
         </div>
+        
         <div class="form-group">
-            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
-                <input type="checkbox" id="sold-checkbox" style="width: auto;"> 
+            <label class="checkbox-container">
+                <input type="checkbox" id="sold-checkbox"> 
                 Marcar como vendido agora?
             </label>
         </div>
+        
         <button type="submit" class="add-btn" id="submit-btn">Adicionar</button>
     </form>
     
-    <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+    <hr>
     
     <h2>Links Salvos</h2>
     <div id="links-list"><span class="loading-text">Carregando seus links...</span></div>
@@ -113,14 +256,13 @@
         }
     }
 
-    // Adiciona o link e GERA O ID ÚNICO
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        submitBtn.textContent = "Adicionando...";
+        submitBtn.textContent = "Salvando...";
         submitBtn.disabled = true;
 
         const data = {
-            id: "ID-" + Date.now(), // <-- ISSO RESOLVE O PROBLEMA! Gera um ID exclusivo.
+            id: "ID-" + Date.now(), 
             name: document.getElementById('name-input').value,
             category: document.getElementById('category-input').value,
             url: document.getElementById('url-input').value,
@@ -145,7 +287,6 @@
 
     // Alternar Vendido
     window.toggleSold = async function(id, currentStatus) {
-        // Exibe um alerta de carregamento simples mudando o mouse ou visual
         document.body.style.cursor = "wait";
         const newStatus = currentStatus === "TRUE" ? "FALSE" : "TRUE";
         
@@ -182,7 +323,6 @@
     function render(data) {
         listContainer.innerHTML = '';
         
-        // Verifica se a planilha retornou um erro (ex: limite da API ou erro de sintaxe)
         if(data.error) {
             listContainer.innerHTML = '<span class="loading-text">Erro na API ou a planilha está vazia.</span>';
             return;
@@ -194,7 +334,6 @@
         }
 
         data.forEach(item => {
-            // Previne falha caso haja linhas na planilha em branco
             if(!item.name && !item.url) return; 
 
             const isSold = item.sold === "TRUE";
@@ -203,7 +342,7 @@
             div.innerHTML = `
                 <div class="left-side">
                     <a href="${item.url}" target="_blank" class="name-link ${isSold ? 'sold' : ''}">${item.name}</a>
-                    <span class="category-tag" onclick="toggleSold('${item.id}', '${item.sold}')" title="Clique para alterar para ${isSold ? 'Ativo' : 'Vendido'}">${item.category}</span>
+                    <span class="category-tag" onclick="toggleSold('${item.id}', '${item.sold}')" title="Clique para alterar status">${item.category}</span>
                 </div>
                 <button class="btn-delete" onclick="deleteLink('${item.id}')">Excluir</button>
             `;
@@ -211,7 +350,7 @@
         });
     }
 
-    // Chama a função assim que abrir a página
+    // Carrega a lista automaticamente
     loadLinks();
 </script>
 </body>
