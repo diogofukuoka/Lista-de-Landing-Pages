@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Landing Pages</title>
+    <style>
+        /* (Seu CSS permanece o mesmo para manter o visual) */
+        body { font-family: sans-serif; background-color: #f3f4f6; padding: 20px; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #1e40af; }
+        .form-group { margin-bottom: 15px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button.add-btn { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; }
+        .link-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; gap: 15px; }
+        .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; }
+        .name-link.sold { color: #f97316; } 
+        .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 2px 8px; border-radius: 4px; cursor: pointer; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Minhas Landing Pages</h1>
+    <form id="link-form">
+        <input type="text" id="name-input" placeholder="Nome da Página" required><br><br>
+        <input type="text" id="category-input" list="cats" placeholder="Categoria"><br><br>
+        <datalist id="cats"></datalist>
+        <input type="url" id="url-input" placeholder="https://..." required><br><br>
+        <button type="submit" class="add-btn">Adicionar</button>
+    </form>
+    <div id="links-list">Carregando...</div>
+</div>
+
+<script>
+    // --- COLE O SEU LINK DO SHEETDB AQUI ABAIXO ---
+    const API_URL = "COLE_SEU_LINK_AQUI"; 
+    // ----------------------------------------------
+
+    const form = document.getElementById('link-form');
+    
+    // Carregar dados ao abrir
+    async function loadLinks() {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        render(data);
+    }
+
+    // Adicionar novo link
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('name-input').value,
+            category: document.getElementById('category-input').value,
+            url: document.getElementById('url-input').value,
+            sold: "FALSE" // Padrão
+        };
+
+        await fetch(API_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({data: [data]})
+        });
+        form.reset();
+        loadLinks();
+    });
+
+    // Mudar status Vendido
+    async function toggleSold(id, currentStatus) {
+        const newStatus = currentStatus === "TRUE" ? "FALSE" : "TRUE";
+        await fetch(`${API_URL}/id/${id}`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({sold: newStatus})
+        });
+        loadLinks();
+    }
+
+    // Deletar
+    async function deleteLink(id) {
+        await fetch(`${API_URL}/id/${id}`, { method: 'DELETE' });
+        loadLinks();
+    }
+
+    function render(data) {
+        const list = document.getElementById('links-list');
+        list.innerHTML = '';
+        data.forEach(item => {
+            const isSold = item.sold === "TRUE";
+            const div = document.createElement('div');
+            div.className = 'link-item';
+            div.innerHTML = `
+                <div>
+                    <a href="${item.url}" target="_blank" class="name-link ${isSold ? 'sold' : ''}">${item.name}</a>
+                    <span class="category-tag" onclick="toggleSold('${item.id}', '${item.sold}')">${item.category}</span>
+                </div>
+                <button class="btn-delete" onclick="deleteLink('${item.id}')">Excluir</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    loadLinks();
+</script>
+</body>
+</html>
