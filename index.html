@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <!-- ESTA É A LINHA MÁGICA QUE RESOLVE O PROBLEMA NO CELULAR -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minhas Landing Pages</title>
     
@@ -43,7 +42,6 @@
             color: #4b5563;
         }
         
-        /* Inputs maiores para não dar zoom no celular e facilitar o toque */
         input[type="text"], 
         input[type="url"], 
         select { 
@@ -54,6 +52,7 @@
             font-size: 16px; 
             outline: none;
             transition: border-color 0.2s;
+            background-color: white;
         }
         
         input[type="text"]:focus, 
@@ -61,6 +60,46 @@
             border-color: #2563eb;
         }
         
+        /* Estilos do Menu Suspenso Customizado (Dropdown) */
+        .dropdown-container {
+            position: relative;
+        }
+        
+        .custom-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #2563eb;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .custom-dropdown.show {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 12px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 16px;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover, .dropdown-item:active {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+        }
+
         .checkbox-container {
             display: flex; 
             align-items: center; 
@@ -96,62 +135,15 @@
         hr { border: 0; border-top: 1px solid #e5e7eb; margin: 25px 0; }
         h2 { font-size: 18px; color: #1f2937; margin-bottom: 15px; }
         
-        /* Estilos da Lista - Adaptados para quebrar linha se não couber na tela */
-        .link-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 16px 0; 
-            border-bottom: 1px solid #f3f4f6; 
-            gap: 12px; 
-        }
-        
-        .left-side { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            flex-wrap: wrap; /* Permite que a categoria vá para baixo se a tela for muito fina */
-            flex: 1;
-        }
-        
-        .name-link { 
-            text-decoration: none; 
-            color: #1e40af; 
-            font-weight: bold; 
-            font-size: 16px; 
-            word-break: break-word; /* Evita que nomes gigantes quebrem o layout */
-        }
-        
+        .link-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f3f4f6; gap: 12px; }
+        .left-side { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1; }
+        .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; word-break: break-word; }
         .name-link.sold { color: #f97316; } 
-        
-        .category-tag { 
-            font-size: 12px; 
-            color: #4b5563; 
-            background: #e5e7eb; 
-            padding: 4px 10px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            user-select: none; 
-            white-space: nowrap;
-        }
-        
-        .btn-delete { 
-            background: #ef4444; 
-            color: white; 
-            border: none; 
-            padding: 8px 14px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 13px; 
-            font-weight: bold;
-            flex-shrink: 0; 
-            transition: 0.2s;
-        }
-        
+        .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 4px 10px; border-radius: 6px; cursor: pointer; user-select: none; white-space: nowrap; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; flex-shrink: 0; transition: 0.2s; }
         .btn-delete:hover { background: #dc2626; }
         .loading-text { font-style: italic; color: #6b7280; font-size: 15px; }
 
-        /* Ajustes para telas maiores (Tablets e Computadores) */
         @media (min-width: 600px) {
             body { padding: 30px; }
             .container { padding: 35px; }
@@ -170,18 +162,19 @@
     <form id="link-form">
         <div class="form-group">
             <label>Nome da Página</label>
-            <input type="text" id="name-input" placeholder="Ex: Lyon Salão" required>
+            <input type="text" id="name-input" placeholder="Ex: Lyon Salão" required autocomplete="off">
         </div>
         
-        <div class="form-group">
+        <div class="form-group dropdown-container">
             <label>Categoria</label>
-            <input type="text" id="category-input" list="cats" placeholder="Selecione na lista ou digite..." required>
-            <datalist id="cats"></datalist>
+            <!-- O autocomplete="off" evita que o teclado se sobreponha à nossa lista -->
+            <input type="text" id="category-input" placeholder="Selecione na lista ou digite..." required autocomplete="off">
+            <div id="category-dropdown" class="custom-dropdown"></div>
         </div>
         
         <div class="form-group">
             <label>Link (URL)</label>
-            <input type="url" id="url-input" placeholder="https://..." required>
+            <input type="url" id="url-input" placeholder="https://..." required autocomplete="off">
         </div>
         
         <div class="form-group">
@@ -233,26 +226,62 @@
         "Tintas", "Transportadora", "Vidraçaria"
     ];
 
-    // Preenche a lista de categorias
-    const datalist = document.getElementById('cats');
-    categorias.forEach(c => { 
-        const opt = document.createElement('option'); 
-        opt.value = c; 
-        datalist.appendChild(opt); 
+    // Lógica do Menu Suspenso Customizado (Dropdown)
+    const categoryInput = document.getElementById('category-input');
+    const categoryDropdown = document.getElementById('category-dropdown');
+
+    function renderDropdown(filterText = '') {
+        categoryDropdown.innerHTML = '';
+        const lowerFilter = filterText.toLowerCase();
+        
+        // Filtra as categorias que contêm o que foi digitado
+        const filtered = categorias.filter(c => c.toLowerCase().includes(lowerFilter));
+        
+        if (filtered.length === 0) {
+            categoryDropdown.classList.remove('show');
+            return;
+        }
+
+        filtered.forEach(c => {
+            const div = document.createElement('div');
+            div.className = 'dropdown-item';
+            div.textContent = c;
+            
+            // Quando clica no item da lista
+            div.addEventListener('click', () => {
+                categoryInput.value = c;
+                categoryDropdown.classList.remove('show');
+            });
+            
+            categoryDropdown.appendChild(div);
+        });
+        
+        categoryDropdown.classList.add('show');
+    }
+
+    // Eventos do campo de Categoria
+    categoryInput.addEventListener('focus', () => renderDropdown(categoryInput.value));
+    categoryInput.addEventListener('input', (e) => renderDropdown(e.target.value));
+
+    // Fecha o menu suspenso ao clicar fora dele
+    document.addEventListener('click', (e) => {
+        if (!categoryInput.contains(e.target) && !categoryDropdown.contains(e.target)) {
+            categoryDropdown.classList.remove('show');
+        }
     });
 
+    // Lógica principal do sistema
     const form = document.getElementById('link-form');
     const submitBtn = document.getElementById('submit-btn');
     const listContainer = document.getElementById('links-list');
     
-    // Função para buscar os links na planilha
     async function loadLinks() {
         try {
             const res = await fetch(API_URL);
             const data = await res.json();
-            render(data);
+            renderLinks(data);
         } catch (error) {
-            listContainer.innerHTML = '<span style="color: red;">Erro ao carregar. Verifique se colou a URL do SheetDB corretamente no código.</span>';
+            listContainer.innerHTML = '<span style="color: red;">Erro ao carregar. Verifique a URL do SheetDB.</span>';
         }
     }
 
@@ -264,7 +293,7 @@
         const data = {
             id: "ID-" + Date.now(), 
             name: document.getElementById('name-input').value,
-            category: document.getElementById('category-input').value,
+            category: categoryInput.value,
             url: document.getElementById('url-input').value,
             sold: document.getElementById('sold-checkbox').checked ? "TRUE" : "FALSE"
         };
@@ -276,6 +305,7 @@
                 body: JSON.stringify({data:[data]}) 
             });
             form.reset();
+            categoryDropdown.classList.remove('show'); // Esconde a lista após salvar
             await loadLinks();
         } catch (error) {
             alert("Erro ao adicionar. Tente novamente.");
@@ -285,7 +315,6 @@
         }
     });
 
-    // Alternar Vendido
     window.toggleSold = async function(id, currentStatus) {
         document.body.style.cursor = "wait";
         const newStatus = currentStatus === "TRUE" ? "FALSE" : "TRUE";
@@ -304,7 +333,6 @@
         }
     };
 
-    // Deletar
     window.deleteLink = async function(id) {
         if(!confirm("Tem certeza que deseja excluir?")) return;
         
@@ -319,8 +347,7 @@
         }
     };
 
-    // Mostrar os itens na tela
-    function render(data) {
+    function renderLinks(data) {
         listContainer.innerHTML = '';
         
         if(data.error) {
@@ -350,7 +377,6 @@
         });
     }
 
-    // Carrega a lista automaticamente
     loadLinks();
 </script>
 </body>
