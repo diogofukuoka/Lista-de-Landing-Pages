@@ -446,16 +446,28 @@
             return;
         }
 
-        // --- LÓGICA DE ORDENAÇÃO POR COR ---
-        // Ordem desejada: Azul (1), Verde (2), Vermelho (3), Dourado (4)
+        // --- LÓGICA DE ORDENAÇÃO POR COR E ORDEM ALFABÉTICA ---
         data.sort((a, b) => {
+            // 1º Critério: Ordem das Cores
             const getWeight = (status) => {
                 if (status === "GREEN" || status === "TRUE") return 2; // Verde
                 if (status === "RED") return 3; // Vermelho
                 if (status === "GOLD") return 4; // Dourado
                 return 1; // Azul (NORMAL ou vazio)
             };
-            return getWeight(a.sold) - getWeight(b.sold);
+            
+            const weightA = getWeight(a.sold);
+            const weightB = getWeight(b.sold);
+            
+            if (weightA !== weightB) {
+                return weightA - weightB; // Ordena pela cor
+            }
+            
+            // 2º Critério: Ordem Alfabética (se as cores forem iguais)
+            const nameA = a.name ? a.name.toLowerCase() : "";
+            const nameB = b.name ? b.name.toLowerCase() : "";
+            
+            return nameA.localeCompare(nameB, 'pt-BR'); // Ordena de A a Z respeitando acentos
         });
 
         // Variáveis para a contagem
