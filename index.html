@@ -176,6 +176,7 @@
         .stat-box.total { background-color: #4b5563; } /* Cinza */
         .stat-box.blue { background-color: #1e40af; }  /* Azul */
         .stat-box.green { background-color: #16a34a; } /* Verde */
+        .stat-box.green-underlined { background-color: #16a34a; } /* Verde Sublinhado */
         .stat-box.red { background-color: #dc2626; }   /* Vermelho */
         .stat-box.gold { background-color: #d97706; }  /* Dourado */
 
@@ -197,7 +198,7 @@
         .loading-text { font-style: italic; color: #6b7280; font-size: 15px; }
 
         @media (max-width: 599px) {
-            .stat-box { flex-basis: calc(50% - 5px); }
+            .stat-box { flex-basis: calc(33% - 10px); }
             .stat-box.total { flex-basis: 100%; }
             .filter-container { flex-direction: column; align-items: stretch; }
         }
@@ -275,6 +276,11 @@
         <div class="stat-box green">
             <span class="stat-label">Verde</span>
             <span class="stat-value" id="count-green">0</span>
+        </div>
+        <!-- NOVO CONTADOR: VERDE SUBLINHADO -->
+        <div class="stat-box green-underlined">
+            <span class="stat-label" style="text-decoration: underline;">Verde Sub.</span>
+            <span class="stat-value" id="count-green-underlined">0</span>
         </div>
         <div class="stat-box red">
             <span class="stat-label">Vermelho</span>
@@ -377,7 +383,7 @@
             
             if(data.error) {
                 listContainer.innerHTML = '<span class="loading-text">Erro na API ou a planilha está vazia.</span>';
-                updateCounters(0, 0, 0, 0, 0);
+                updateCounters(0, 0, 0, 0, 0, 0);
                 return;
             }
             
@@ -387,7 +393,7 @@
             
         } catch (error) {
             listContainer.innerHTML = '<span style="color: red;">Erro ao carregar. Verifique a URL do SheetDB.</span>';
-            updateCounters(0, 0, 0, 0, 0);
+            updateCounters(0, 0, 0, 0, 0, 0);
         }
     }
 
@@ -524,10 +530,11 @@
     };
 
     // Função para atualizar os números na tela
-    function updateCounters(total, blue, green, gold, red) {
+    function updateCounters(total, blue, green, greenUnderlined, gold, red) {
         document.getElementById('count-total').textContent = total;
         document.getElementById('count-blue').textContent = blue;
         document.getElementById('count-green').textContent = green;
+        document.getElementById('count-green-underlined').textContent = greenUnderlined;
         document.getElementById('count-red').textContent = red;
         document.getElementById('count-gold').textContent = gold;
     }
@@ -537,7 +544,7 @@
 
         if (data.length === 0) {
             listContainer.innerHTML = '<span class="loading-text">Nenhuma página encontrada.</span>';
-            updateCounters(0, 0, 0, 0, 0);
+            updateCounters(0, 0, 0, 0, 0, 0);
             return;
         }
 
@@ -570,6 +577,7 @@
         let countTotal = 0;
         let countBlue = 0;
         let countGreen = 0;
+        let countGreenUnderlined = 0;
         let countGold = 0;
         let countRed = 0;
 
@@ -586,7 +594,7 @@
                 countGreen++;
             } else if (status === "GREEN_UNDERLINED") {
                 colorClass = "green-underlined";
-                countGreen++; // Verde Sublinhado também conta como Verde nas estatísticas
+                countGreenUnderlined++; // Agora conta separado
             } else if (status === "GOLD") {
                 colorClass = "gold";
                 countGold++;
@@ -612,7 +620,7 @@
         });
 
         // Atualiza os contadores na tela após processar todos os links
-        updateCounters(countTotal, countBlue, countGreen, countGold, countRed);
+        updateCounters(countTotal, countBlue, countGreen, countGreenUnderlined, countGold, countRed);
     }
 
     loadLinks();
