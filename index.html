@@ -429,6 +429,18 @@
             return;
         }
 
+        // --- LÓGICA DE ORDENAÇÃO POR COR ---
+        // Ordem desejada: Azul (1), Verde (2), Vermelho (3), Dourado (4)
+        data.sort((a, b) => {
+            const getWeight = (status) => {
+                if (status === "GREEN" || status === "TRUE") return 2; // Verde
+                if (status === "RED") return 3; // Vermelho
+                if (status === "GOLD") return 4; // Dourado
+                return 1; // Azul (NORMAL ou vazio)
+            };
+            return getWeight(a.sold) - getWeight(b.sold);
+        });
+
         // Variáveis para a contagem
         let countTotal = 0;
         let countBlue = 0;
