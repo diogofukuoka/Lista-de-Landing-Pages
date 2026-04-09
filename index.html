@@ -125,8 +125,9 @@
         
         /* Cores dos Links */
         .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; word-break: break-word; transition: color 0.3s; }
-        .name-link.green { color: #16a34a; } /* Verde */
-        .name-link.gold { color: #d97706; }  /* Dourado */
+        .name-link.green { color: #16a34a; } /* Verde - Apresentado */
+        .name-link.gold { color: #d97706; }  /* Dourado - Vendido */
+        .name-link.red { color: #dc2626; }   /* Vermelho - Recusado */
         
         .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 4px 10px; border-radius: 6px; cursor: pointer; user-select: none; white-space: nowrap; transition: 0.2s;}
         .category-tag:hover { background: #d1d5db; }
@@ -171,8 +172,9 @@
             <label>Cor / Status Inicial</label>
             <select id="status-input">
                 <option value="NORMAL">Normal (Azul)</option>
-                <option value="GREEN">Verde (1º Clique)</option>
-                <option value="GOLD">Dourado (2º Clique)</option>
+                <option value="GREEN">Verde (Apresentado)</option>
+                <option value="GOLD">Dourado (Vendido)</option>
+                <option value="RED">Vermelho (Recusado)</option>
             </select>
         </div>
         
@@ -283,7 +285,7 @@
             name: document.getElementById('name-input').value,
             category: categoryInput.value,
             url: document.getElementById('url-input').value,
-            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN ou GOLD
+            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN, GOLD ou RED
         };
 
         try {
@@ -303,7 +305,7 @@
         }
     });
 
-    // Função que alterna entre as 3 cores
+    // Função que alterna entre as 4 cores (Normal -> Verde -> Dourado -> Vermelho -> Normal)
     window.toggleStatus = async function(id, currentStatus) {
         document.body.style.cursor = "wait";
         
@@ -311,7 +313,8 @@
         let newStatus = "GREEN"; 
         if (currentStatus === "NORMAL" || currentStatus === "FALSE") newStatus = "GREEN";
         else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "GOLD";
-        else if (currentStatus === "GOLD") newStatus = "NORMAL";
+        else if (currentStatus === "GOLD") newStatus = "RED";
+        else if (currentStatus === "RED") newStatus = "NORMAL";
         
         try {
             await fetch(`${API_URL}/id/${id}`, { 
@@ -362,7 +365,8 @@
             // Define qual classe de cor aplicar baseada no status
             let colorClass = "";
             if (status === "GREEN" || status === "TRUE") colorClass = "green";
-            if (status === "GOLD") colorClass = "gold";
+            else if (status === "GOLD") colorClass = "gold";
+            else if (status === "RED") colorClass = "red";
 
             const div = document.createElement('div');
             div.className = 'link-item';
