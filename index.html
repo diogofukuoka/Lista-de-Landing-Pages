@@ -185,6 +185,7 @@
         /* Cores dos Links */
         .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; word-break: break-word; transition: color 0.3s; }
         .name-link.green { color: #16a34a; } /* Verde - Apresentado */
+        .name-link.green-underlined { color: #16a34a; text-decoration: underline; } /* Verde Sublinhado */
         .name-link.gold { color: #d97706; }  /* Dourado - Vendido */
         .name-link.red { color: #dc2626; }   /* Vermelho - Recusado */
         
@@ -238,6 +239,7 @@
             <select id="status-input">
                 <option value="NORMAL">Normal (Criado)</option>
                 <option value="GREEN">Verde (Apresentado)</option>
+                <option value="GREEN_UNDERLINED">Verde Sublinhado</option>
                 <option value="RED">Vermelho (Recusado)</option>
                 <option value="GOLD">Dourado (Vendido)</option>
             </select>
@@ -251,7 +253,7 @@
     <div class="header-links">
         <h2>Links Salvos</h2>
         
-        <!-- Novo Filtro de Categorias -->
+        <!-- Filtro de Categorias -->
         <div class="filter-container">
             <label for="category-filter">Filtrar:</label>
             <select id="category-filter">
@@ -442,7 +444,7 @@
             name: document.getElementById('name-input').value,
             category: categoryInput.value,
             url: document.getElementById('url-input').value,
-            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN, RED ou GOLD
+            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN, GREEN_UNDERLINED, RED ou GOLD
         };
 
         try {
@@ -465,20 +467,23 @@
     // Variável para controlar o tempo de espera (5 segundos)
     let sortTimeout;
 
-    // Função que alterna entre as 4 cores (Azul -> Verde -> Vermelho -> Dourado -> Azul)
+    // Função que alterna entre as cores (Azul -> Verde -> Verde Sublinhado -> Vermelho -> Dourado -> Azul)
     window.toggleStatus = async function(id, currentStatus, element) {
         
         // Define a próxima cor na sequência solicitada
         let newStatus = "GREEN"; 
         if (currentStatus === "NORMAL" || currentStatus === "FALSE") newStatus = "GREEN"; // Azul -> Verde
-        else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "RED"; // Verde -> Vermelho
+        else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "GREEN_UNDERLINED"; // Verde -> Verde Sublinhado
+        else if (currentStatus === "GREEN_UNDERLINED") newStatus = "RED"; // Verde Sublinhado -> Vermelho
         else if (currentStatus === "RED") newStatus = "GOLD"; // Vermelho -> Dourado
         else if (currentStatus === "GOLD") newStatus = "NORMAL"; // Dourado -> Azul
         
         // 1. Atualiza a cor visualmente de forma IMEDIATA
         const linkTag = element.previousElementSibling; // Pega a tag <a> que está antes do botão da categoria
         linkTag.className = "name-link"; // Reseta as classes de cor (fica Azul)
+        
         if (newStatus === "GREEN") linkTag.classList.add("green");
+        else if (newStatus === "GREEN_UNDERLINED") linkTag.classList.add("green-underlined");
         else if (newStatus === "RED") linkTag.classList.add("red");
         else if (newStatus === "GOLD") linkTag.classList.add("gold");
         
@@ -541,8 +546,9 @@
             // 1º Critério: Ordem das Cores
             const getWeight = (status) => {
                 if (status === "GREEN" || status === "TRUE") return 2; // Verde
-                if (status === "RED") return 3; // Vermelho
-                if (status === "GOLD") return 4; // Dourado
+                if (status === "GREEN_UNDERLINED") return 3; // Verde Sublinhado
+                if (status === "RED") return 4; // Vermelho
+                if (status === "GOLD") return 5; // Dourado
                 return 1; // Azul (NORMAL ou vazio)
             };
             
@@ -578,6 +584,9 @@
             if (status === "GREEN" || status === "TRUE") {
                 colorClass = "green";
                 countGreen++;
+            } else if (status === "GREEN_UNDERLINED") {
+                colorClass = "green-underlined";
+                countGreen++; // Verde Sublinhado também conta como Verde nas estatísticas
             } else if (status === "GOLD") {
                 colorClass = "gold";
                 countGold++;
