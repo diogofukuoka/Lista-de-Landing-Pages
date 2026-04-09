@@ -118,7 +118,36 @@
         button.add-btn:disabled { background: #9ca3af; cursor: not-allowed; }
         
         hr { border: 0; border-top: 1px solid #e5e7eb; margin: 25px 0; }
-        h2 { font-size: 18px; color: #1f2937; margin-bottom: 15px; }
+        
+        .header-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        h2 { font-size: 18px; color: #1f2937; margin: 0; }
+        
+        /* Estilo do Filtro */
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f9fafb;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .filter-container label {
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+        
+        .filter-container select {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
         
         /* Painel de Estatísticas */
         .stats-container {
@@ -169,13 +198,14 @@
         @media (max-width: 599px) {
             .stat-box { flex-basis: calc(50% - 5px); }
             .stat-box.total { flex-basis: 100%; }
+            .filter-container { flex-direction: column; align-items: stretch; }
         }
 
         @media (min-width: 600px) {
             body { padding: 30px; }
             .container { padding: 35px; }
             h1 { font-size: 26px; text-align: left; }
-            h2 { font-size: 20px; }
+            .header-links { flex-direction: row; justify-content: space-between; align-items: center; }
             .link-item { flex-wrap: nowrap; padding: 12px 0; }
             .left-side { flex-wrap: nowrap; }
         }
@@ -218,7 +248,17 @@
     
     <hr>
     
-    <h2>Links Salvos</h2>
+    <div class="header-links">
+        <h2>Links Salvos</h2>
+        
+        <!-- Novo Filtro de Categorias -->
+        <div class="filter-container">
+            <label for="category-filter">Filtrar:</label>
+            <select id="category-filter">
+                <option value="ALL">Todas as categorias</option>
+            </select>
+        </div>
+    </div>
 
     <!-- Painel de Contagem -->
     <div class="stats-container">
@@ -324,17 +364,73 @@
     const form = document.getElementById('link-form');
     const submitBtn = document.getElementById('submit-btn');
     const listContainer = document.getElementById('links-list');
+    const categoryFilter = document.getElementById('category-filter');
     
+    let allLinksData = []; // Variável global para armazenar todos os links do banco
+
     async function loadLinks() {
         try {
             const res = await fetch(API_URL);
             const data = await res.json();
-            renderLinks(data);
+            
+            if(data.error) {
+                listContainer.innerHTML = '<span class="loading-text">Erro na API ou a planilha está vazia.</span>';
+                updateCounters(0, 0, 0, 0, 0);
+                return;
+            }
+            
+            allLinksData = data; // Salva os dados globalmente
+            updateFilterDropdown(); // Atualiza as opções do filtro
+            applyFilter(); // Renderiza a lista aplicando o filtro atual
+            
         } catch (error) {
             listContainer.innerHTML = '<span style="color: red;">Erro ao carregar. Verifique a URL do SheetDB.</span>';
             updateCounters(0, 0, 0, 0, 0);
         }
     }
+
+    // Função para atualizar as opções do filtro com base nas categorias existentes
+    function updateFilterDropdown() {
+        const currentValue = categoryFilter.value; // Guarda o valor selecionado atualmente
+        
+        // Extrai categorias únicas da lista atual e as ordena alfabeticamente
+        const uniqueCategories = [...new Set(allLinksData.map(item => item.category))]
+                                 .filter(Boolean) // Remove vazios
+                                 .sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+        // Reconstrói o HTML do select
+        categoryFilter.innerHTML = '<option value="ALL">Todas as categorias</option>';
+        
+        uniqueCategories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            categoryFilter.appendChild(option);
+        });
+
+        // Se a categoria que estava selecionada ainda existir, mantém ela selecionada
+        if (uniqueCategories.includes(currentValue)) {
+            categoryFilter.value = currentValue;
+        } else {
+            categoryFilter.value = "ALL";
+        }
+    }
+
+    // Função que filtra os dados e manda renderizar
+    function applyFilter() {
+        const filterValue = categoryFilter.value;
+        let dataToRender = allLinksData;
+
+        if (filterValue !== "ALL") {
+            dataToRender = allLinksData.filter(item => item.category === filterValue);
+        }
+
+        // Passa uma cópia do array para a função renderLinks (para não alterar o array original na ordenação)
+        renderLinks([...dataToRender]);
+    }
+
+    // Escuta mudanças no filtro
+    categoryFilter.addEventListener('change', applyFilter);
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -433,15 +529,9 @@
 
     function renderLinks(data) {
         listContainer.innerHTML = '';
-        
-        if(data.error) {
-            listContainer.innerHTML = '<span class="loading-text">Erro na API ou a planilha está vazia.</span>';
-            updateCounters(0, 0, 0, 0, 0);
-            return;
-        }
 
         if (data.length === 0) {
-            listContainer.innerHTML = '<span class="loading-text">Nenhuma página salva ainda.</span>';
+            listContainer.innerHTML = '<span class="loading-text">Nenhuma página encontrada.</span>';
             updateCounters(0, 0, 0, 0, 0);
             return;
         }
