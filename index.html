@@ -208,8 +208,8 @@
             <select id="status-input">
                 <option value="NORMAL">Normal (Criado)</option>
                 <option value="GREEN">Verde (Apresentado)</option>
-                <option value="GOLD">Dourado (Vendido)</option>
                 <option value="RED">Vermelho (Recusado)</option>
+                <option value="GOLD">Dourado (Vendido)</option>
             </select>
         </div>
         
@@ -346,7 +346,7 @@
             name: document.getElementById('name-input').value,
             category: categoryInput.value,
             url: document.getElementById('url-input').value,
-            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN, GOLD ou RED
+            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN, RED ou GOLD
         };
 
         try {
@@ -369,22 +369,22 @@
     // Variável para controlar o tempo de espera (5 segundos)
     let sortTimeout;
 
-    // Função que alterna entre as 4 cores (Normal -> Verde -> Dourado -> Vermelho -> Normal)
+    // Função que alterna entre as 4 cores (Azul -> Verde -> Vermelho -> Dourado -> Azul)
     window.toggleStatus = async function(id, currentStatus, element) {
         
-        // Define a próxima cor na sequência
+        // Define a próxima cor na sequência solicitada
         let newStatus = "GREEN"; 
-        if (currentStatus === "NORMAL" || currentStatus === "FALSE") newStatus = "GREEN";
-        else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "GOLD";
-        else if (currentStatus === "GOLD") newStatus = "RED";
-        else if (currentStatus === "RED") newStatus = "NORMAL";
+        if (currentStatus === "NORMAL" || currentStatus === "FALSE") newStatus = "GREEN"; // Azul -> Verde
+        else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "RED"; // Verde -> Vermelho
+        else if (currentStatus === "RED") newStatus = "GOLD"; // Vermelho -> Dourado
+        else if (currentStatus === "GOLD") newStatus = "NORMAL"; // Dourado -> Azul
         
         // 1. Atualiza a cor visualmente de forma IMEDIATA
         const linkTag = element.previousElementSibling; // Pega a tag <a> que está antes do botão da categoria
-        linkTag.className = "name-link"; // Reseta as classes de cor
+        linkTag.className = "name-link"; // Reseta as classes de cor (fica Azul)
         if (newStatus === "GREEN") linkTag.classList.add("green");
-        else if (newStatus === "GOLD") linkTag.classList.add("gold");
         else if (newStatus === "RED") linkTag.classList.add("red");
+        else if (newStatus === "GOLD") linkTag.classList.add("gold");
         
         // Atualiza o evento de clique para o novo status (caso o usuário clique várias vezes rápido)
         element.setAttribute("onclick", `toggleStatus('${id}', '${newStatus}', this)`);
