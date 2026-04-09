@@ -147,8 +147,8 @@
         .stat-box.total { background-color: #4b5563; } /* Cinza */
         .stat-box.blue { background-color: #1e40af; }  /* Azul */
         .stat-box.green { background-color: #16a34a; } /* Verde */
-        .stat-box.gold { background-color: #d97706; }  /* Dourado */
         .stat-box.red { background-color: #dc2626; }   /* Vermelho */
+        .stat-box.gold { background-color: #d97706; }  /* Dourado */
 
         .link-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f3f4f6; gap: 12px; }
         .left-side { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1; }
@@ -366,9 +366,11 @@
         }
     });
 
+    // Variável para controlar o tempo de espera (5 segundos)
+    let sortTimeout;
+
     // Função que alterna entre as 4 cores (Normal -> Verde -> Dourado -> Vermelho -> Normal)
-    window.toggleStatus = async function(id, currentStatus) {
-        document.body.style.cursor = "wait";
+    window.toggleStatus = async function(id, currentStatus, element) {
         
         // Define a próxima cor na sequência
         let newStatus = "GREEN"; 
@@ -377,17 +379,32 @@
         else if (currentStatus === "GOLD") newStatus = "RED";
         else if (currentStatus === "RED") newStatus = "NORMAL";
         
+        // 1. Atualiza a cor visualmente de forma IMEDIATA
+        const linkTag = element.previousElementSibling; // Pega a tag <a> que está antes do botão da categoria
+        linkTag.className = "name-link"; // Reseta as classes de cor
+        if (newStatus === "GREEN") linkTag.classList.add("green");
+        else if (newStatus === "GOLD") linkTag.classList.add("gold");
+        else if (newStatus === "RED") linkTag.classList.add("red");
+        
+        // Atualiza o evento de clique para o novo status (caso o usuário clique várias vezes rápido)
+        element.setAttribute("onclick", `toggleStatus('${id}', '${newStatus}', this)`);
+
+        // 2. Envia a atualização para o banco de dados em segundo plano
         try {
-            await fetch(`${API_URL}/id/${id}`, { 
+            fetch(`${API_URL}/id/${id}`, { 
                 method: 'PATCH', 
                 headers: {'Content-Type': 'application/json'}, 
                 body: JSON.stringify({sold: newStatus}) 
             });
-            await loadLinks();
+            
+            // 3. Inicia o cronômetro de 5 segundos para mover o link de lugar
+            clearTimeout(sortTimeout); // Limpa o cronômetro anterior se o usuário clicar rápido
+            sortTimeout = setTimeout(() => {
+                loadLinks(); // Recarrega e reordena a lista após 5 segundos
+            }, 5000);
+            
         } catch (error) {
-            alert("Erro ao atualizar status.");
-        } finally {
-            document.body.style.cursor = "default";
+            console.error("Erro ao atualizar status.", error);
         }
     };
 
@@ -410,8 +427,8 @@
         document.getElementById('count-total').textContent = total;
         document.getElementById('count-blue').textContent = blue;
         document.getElementById('count-green').textContent = green;
-        document.getElementById('count-gold').textContent = gold;
         document.getElementById('count-red').textContent = red;
+        document.getElementById('count-gold').textContent = gold;
     }
 
     function renderLinks(data) {
@@ -472,10 +489,11 @@
 
             const div = document.createElement('div');
             div.className = 'link-item';
+            // Note que passamos "this" na função toggleStatus para podermos mudar a cor instantaneamente
             div.innerHTML = `
                 <div class="left-side">
                     <a href="${item.url}" target="_blank" class="name-link ${colorClass}">${item.name}</a>
-                    <span class="category-tag" onclick="toggleStatus('${item.id}', '${status}')" title="Clique para mudar a cor">${item.category}</span>
+                    <span class="category-tag" onclick="toggleStatus('${item.id}', '${status}', this)" title="Clique para mudar a cor">${item.category}</span>
                 </div>
                 <button class="btn-delete" onclick="deleteLink('${item.id}')">Excluir</button>
             `;
