@@ -120,14 +120,44 @@
         hr { border: 0; border-top: 1px solid #e5e7eb; margin: 25px 0; }
         h2 { font-size: 18px; color: #1f2937; margin-bottom: 15px; }
         
+        /* Painel de Estatísticas */
+        .stats-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 8px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9; font-weight: 600;}
+        .stat-value { font-size: 22px; font-weight: bold; }
+        
+        .stat-box.total { background-color: #4b5563; } /* Cinza */
+        .stat-box.blue { background-color: #1e40af; }  /* Azul */
+        .stat-box.green { background-color: #16a34a; } /* Verde */
+        .stat-box.gold { background-color: #d97706; }  /* Dourado */
+        .stat-box.red { background-color: #dc2626; }   /* Vermelho */
+
         .link-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f3f4f6; gap: 12px; }
         .left-side { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1; }
         
         /* Cores dos Links */
         .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; word-break: break-word; transition: color 0.3s; }
-        .name-link.green { color: #16a34a; } /* Verde - Apresentado */
-        .name-link.gold { color: #d97706; }  /* Dourado - Vendido */
-        .name-link.red { color: #dc2626; }   /* Vermelho - Recusado */
+        .name-link.green { color: #16a34a; } /* Verde - 1º Clique */
+        .name-link.gold { color: #d97706; }  /* Dourado - 2º Clique */
+        .name-link.red { color: #dc2626; }   /* Vermelho - 3º Clique */
         
         .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 4px 10px; border-radius: 6px; cursor: pointer; user-select: none; white-space: nowrap; transition: 0.2s;}
         .category-tag:hover { background: #d1d5db; }
@@ -135,6 +165,11 @@
         .btn-delete { background: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; flex-shrink: 0; transition: 0.2s; }
         .btn-delete:hover { background: #dc2626; }
         .loading-text { font-style: italic; color: #6b7280; font-size: 15px; }
+
+        @media (max-width: 599px) {
+            .stat-box { flex-basis: calc(50% - 5px); }
+            .stat-box.total { flex-basis: 100%; }
+        }
 
         @media (min-width: 600px) {
             body { padding: 30px; }
@@ -171,10 +206,10 @@
         <div class="form-group">
             <label>Cor / Status Inicial</label>
             <select id="status-input">
-                <option value="NORMAL">Normal (Criado)</option>
-                <option value="GREEN">Verde (Apresentado)</option>
-                <option value="GOLD">Dourado (Vendido)</option>
-                <option value="RED">Vermelho (Recusado)</option>
+                <option value="NORMAL">Normal (Azul)</option>
+                <option value="GREEN">Verde (1º Clique)</option>
+                <option value="GOLD">Dourado (2º Clique)</option>
+                <option value="RED">Vermelho (3º Clique)</option>
             </select>
         </div>
         
@@ -184,6 +219,31 @@
     <hr>
     
     <h2>Links Salvos</h2>
+
+    <!-- Painel de Contagem -->
+    <div class="stats-container">
+        <div class="stat-box total">
+            <span class="stat-label">Total</span>
+            <span class="stat-value" id="count-total">0</span>
+        </div>
+        <div class="stat-box blue">
+            <span class="stat-label">Azul</span>
+            <span class="stat-value" id="count-blue">0</span>
+        </div>
+        <div class="stat-box green">
+            <span class="stat-label">Verde</span>
+            <span class="stat-value" id="count-green">0</span>
+        </div>
+        <div class="stat-box gold">
+            <span class="stat-label">Dourado</span>
+            <span class="stat-value" id="count-gold">0</span>
+        </div>
+        <div class="stat-box red">
+            <span class="stat-label">Vermelho</span>
+            <span class="stat-value" id="count-red">0</span>
+        </div>
+    </div>
+
     <div id="links-list"><span class="loading-text">Carregando seus links...</span></div>
 </div>
 
@@ -213,7 +273,7 @@
         "Loja de roupas", "Loja de suplementos", "Loja de variedades", "Loja de vinhos", "Madeireira", 
         "Manicure e pedicure", "Marcenaria", "Marmoraria", "Mecânica automotiva", "Mercado", "Mercearia", 
         "Moda íntima", "Móveis planejados", "Oficina de motos", "Ótica", "Padaria", "Papelaria", 
-        "Pastelaria", "Peixaria", "Perfumaria", "Pet shop", "Pinturas e texturas", "Pizzaria", "Posto de combustível", "Pousada", 
+        "Pastelaria", "Peixaria", "Perfumaria", "Pet shop", "Pizzaria", "Posto de combustível", "Pousada", 
         "Pronto-socorro", "Relojoaria", "Restaurante a quilo", "Restaurante prato feito", "Restaurante japonês", "Restaurante vegetariano", 
         "Restaurante à la carte", "Rotisseria", "Salão de beleza", "Sapataria", "Sebo (livros usados)", 
         "Serralheria", "Shopping center", "Sorveteria", "Supermercado", "Tabacaria", "Tapeçaria", "Teatro", 
@@ -272,6 +332,7 @@
             renderLinks(data);
         } catch (error) {
             listContainer.innerHTML = '<span style="color: red;">Erro ao carregar. Verifique a URL do SheetDB.</span>';
+            updateCounters(0, 0, 0, 0, 0);
         }
     }
 
@@ -344,29 +405,58 @@
         }
     };
 
+    // Função para atualizar os números na tela
+    function updateCounters(total, blue, green, gold, red) {
+        document.getElementById('count-total').textContent = total;
+        document.getElementById('count-blue').textContent = blue;
+        document.getElementById('count-green').textContent = green;
+        document.getElementById('count-gold').textContent = gold;
+        document.getElementById('count-red').textContent = red;
+    }
+
     function renderLinks(data) {
         listContainer.innerHTML = '';
         
         if(data.error) {
             listContainer.innerHTML = '<span class="loading-text">Erro na API ou a planilha está vazia.</span>';
+            updateCounters(0, 0, 0, 0, 0);
             return;
         }
 
         if (data.length === 0) {
             listContainer.innerHTML = '<span class="loading-text">Nenhuma página salva ainda.</span>';
+            updateCounters(0, 0, 0, 0, 0);
             return;
         }
+
+        // Variáveis para a contagem
+        let countTotal = 0;
+        let countBlue = 0;
+        let countGreen = 0;
+        let countGold = 0;
+        let countRed = 0;
 
         data.forEach(item => {
             if(!item.name && !item.url) return; 
 
+            countTotal++; // Incrementa o total
             const status = item.sold || "NORMAL";
             
-            // Define qual classe de cor aplicar baseada no status
+            // Define qual classe de cor aplicar baseada no status e incrementa o contador correto
             let colorClass = "";
-            if (status === "GREEN" || status === "TRUE") colorClass = "green";
-            else if (status === "GOLD") colorClass = "gold";
-            else if (status === "RED") colorClass = "red";
+            if (status === "GREEN" || status === "TRUE") {
+                colorClass = "green";
+                countGreen++;
+            } else if (status === "GOLD") {
+                colorClass = "gold";
+                countGold++;
+            } else if (status === "RED") {
+                colorClass = "red";
+                countRed++;
+            } else {
+                // Se for NORMAL ou qualquer outra coisa não mapeada, conta como Azul
+                countBlue++;
+            }
 
             const div = document.createElement('div');
             div.className = 'link-item';
@@ -379,6 +469,9 @@
             `;
             listContainer.appendChild(div);
         });
+
+        // Atualiza os contadores na tela após processar todos os links
+        updateCounters(countTotal, countBlue, countGreen, countGold, countRed);
     }
 
     loadLinks();
