@@ -62,140 +62,110 @@
         }
         
         /* Estilos do Menu Suspenso Customizado (Dropdown) */
-        .dropdown-container {
-            position: relative;
-        }
+        .dropdown-container { position: relative; }
         
         .custom-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #2563eb;
-            border-radius: 0 0 8px 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            display: none;
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: white; border: 1px solid #2563eb; border-radius: 0 0 8px 8px;
+            max-height: 200px; overflow-y: auto; z-index: 1000;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); display: none;
         }
         
-        .custom-dropdown.show {
-            display: block;
-        }
+        .custom-dropdown.show { display: block; }
         
-        .dropdown-item {
-            padding: 12px 14px;
-            cursor: pointer;
-            border-bottom: 1px solid #f3f4f6;
-            font-size: 16px;
-        }
-        
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-        
-        .dropdown-item:hover, .dropdown-item:active {
-            background-color: #eff6ff;
-            color: #1d4ed8;
-        }
+        .dropdown-item { padding: 12px 14px; cursor: pointer; border-bottom: 1px solid #f3f4f6; font-size: 16px; }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover, .dropdown-item:active { background-color: #eff6ff; color: #1d4ed8; }
         
         button.add-btn { 
-            background: #2563eb; 
-            color: white; 
-            padding: 14px 20px; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            width: 100%; 
-            font-weight: bold; 
-            font-size: 16px;
-            transition: 0.2s;
+            background: #2563eb; color: white; padding: 14px 20px; border: none; 
+            border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; 
+            font-size: 16px; transition: 0.2s;
         }
-        
         button.add-btn:hover { background: #1d4ed8; }
         button.add-btn:disabled { background: #9ca3af; cursor: not-allowed; }
         
         hr { border: 0; border-top: 1px solid #e5e7eb; margin: 25px 0; }
         
-        .header-links {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
+        .header-links { display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
         h2 { font-size: 18px; color: #1f2937; margin: 0; }
         
         /* Estilo do Filtro */
-        .filter-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f9fafb;
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-        }
-        
-        .filter-container label {
-            margin-bottom: 0;
-            white-space: nowrap;
-        }
-        
-        .filter-container select {
-            padding: 8px 12px;
-            font-size: 14px;
-        }
+        .filter-container { display: flex; align-items: center; gap: 10px; background: #f9fafb; padding: 10px 15px; border-radius: 8px; border: 1px solid #e5e7eb; }
+        .filter-container label { margin-bottom: 0; white-space: nowrap; }
+        .filter-container select { padding: 8px 12px; font-size: 14px; }
         
         /* Painel de Estatísticas */
-        .stats-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .stat-box {
-            flex: 1;
-            min-width: 80px;
-            padding: 12px 8px;
-            border-radius: 8px;
-            text-align: center;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
+        .stats-container { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-box { flex: 1; min-width: 80px; padding: 12px 8px; border-radius: 8px; text-align: center; color: white; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9; font-weight: 600;}
         .stat-value { font-size: 22px; font-weight: bold; }
         
-        .stat-box.total { background-color: #4b5563; } /* Cinza */
-        .stat-box.blue { background-color: #1e40af; }  /* Azul */
-        .stat-box.green { background-color: #16a34a; } /* Verde */
-        .stat-box.green-underlined { background-color: #16a34a; } /* Verde Sublinhado */
-        .stat-box.red { background-color: #dc2626; }   /* Vermelho */
-        .stat-box.gold { background-color: #d97706; }  /* Dourado */
+        .stat-box.total { background-color: #4b5563; } 
+        .stat-box.blue { background-color: #1e40af; }  
+        .stat-box.green { background-color: #16a34a; } 
+        .stat-box.green-underlined { background-color: #16a34a; } 
+        .stat-box.red { background-color: #dc2626; }   
+        .stat-box.gold { background-color: #d97706; }  
 
         .link-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f3f4f6; gap: 12px; }
         .left-side { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1; }
         
-        /* Cores dos Links */
+        /* Cores dos Links e Ícone de Contato */
+        .name-wrapper { display: flex; align-items: center; gap: 8px; }
         .name-link { text-decoration: none; color: #1e40af; font-weight: bold; font-size: 16px; word-break: break-word; transition: color 0.3s; }
-        .name-link.green { color: #16a34a; } /* Verde - Apresentado */
-        .name-link.green-underlined { color: #16a34a; text-decoration: underline; } /* Verde Sublinhado */
-        .name-link.gold { color: #d97706; }  /* Dourado - Vendido */
-        .name-link.red { color: #dc2626; }   /* Vermelho - Recusado */
+        .name-link.green { color: #16a34a; } 
+        .name-link.green-underlined { color: #16a34a; text-decoration: underline; } 
+        .name-link.gold { color: #d97706; }  
+        .name-link.red { color: #dc2626; }   
         
+        .contact-icon { 
+            cursor: pointer; color: #9ca3af; display: flex; align-items: center; 
+            justify-content: center; padding: 4px; border-radius: 50%; transition: 0.2s;
+        }
+        .contact-icon:hover { color: #2563eb; background-color: #eff6ff; }
+        .contact-icon svg { width: 18px; height: 18px; }
+
         .category-tag { font-size: 12px; color: #4b5563; background: #e5e7eb; padding: 4px 10px; border-radius: 6px; cursor: pointer; user-select: none; white-space: nowrap; transition: 0.2s;}
         .category-tag:hover { background: #d1d5db; }
         
         .btn-delete { background: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; flex-shrink: 0; transition: 0.2s; }
         .btn-delete:hover { background: #dc2626; }
         .loading-text { font-style: italic; color: #6b7280; font-size: 15px; }
+
+        /* --- ESTILOS DO MODAL DE CONTATO --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); display: none;
+            justify-content: center; align-items: center; z-index: 2000;
+            padding: 15px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 12px;
+            width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h3 { margin: 0; color: #1f2937; font-size: 18px; }
+        .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; color: #9ca3af; line-height: 1; }
+        .close-modal:hover { color: #ef4444; }
+        
+        .input-group-row { display: flex; gap: 10px; align-items: center; }
+        .btn-whatsapp { 
+            background: #25D366; color: white; border: none; padding: 0 15px; 
+            height: 46px; border-radius: 8px; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .btn-whatsapp:hover { background: #128C7E; }
+        .btn-whatsapp svg { width: 22px; height: 22px; fill: currentColor; }
+        
+        .btn-save-modal { 
+            background: #10b981; color: white; border: none; padding: 14px; 
+            border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; 
+            font-size: 16px; margin-top: 10px; transition: 0.2s;
+        }
+        .btn-save-modal:hover { background: #059669; }
 
         @media (max-width: 599px) {
             .stat-box { flex-basis: calc(33% - 10px); }
@@ -254,7 +224,6 @@
     <div class="header-links">
         <h2>Links Salvos</h2>
         
-        <!-- Filtro de Categorias -->
         <div class="filter-container">
             <label for="category-filter">Filtrar:</label>
             <select id="category-filter">
@@ -263,7 +232,6 @@
         </div>
     </div>
 
-    <!-- Painel de Contagem -->
     <div class="stats-container">
         <div class="stat-box total">
             <span class="stat-label">Total</span>
@@ -277,7 +245,6 @@
             <span class="stat-label">Apresentados</span>
             <span class="stat-value" id="count-green">0</span>
         </div>
-        <!-- NOVO CONTADOR: VERDE SUBLINHADO -->
         <div class="stat-box green-underlined">
             <span class="stat-label" style="text-decoration: underline;">Promessas</span>
             <span class="stat-value" id="count-green-underlined">0</span>
@@ -295,10 +262,45 @@
     <div id="links-list"><span class="loading-text">Carregando seus links...</span></div>
 </div>
 
+<!-- MODAL DE CONTATO -->
+<div class="modal-overlay" id="contact-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Contato</h3>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        
+        <div class="form-group">
+            <label>Nome do Contato</label>
+            <input type="text" id="modal-contact-name" placeholder="Ex: João Silva">
+        </div>
+        
+        <div class="form-group">
+            <label>Telefone Fixo</label>
+            <input type="text" id="modal-fixed-phone" placeholder="Ex: (11) 3000-0000">
+        </div>
+        
+        <div class="form-group">
+            <label>Celular / WhatsApp</label>
+            <div class="input-group-row">
+                <input type="text" id="modal-mobile-phone" placeholder="Ex: 11999999999" style="flex: 1;">
+                <button class="btn-whatsapp" onclick="openWhatsApp()" title="Abrir WhatsApp">
+                    <svg viewBox="0 0 24 24"><path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.124.553 4.194 1.605 6.015L.11 23.88l5.97-1.565a11.98 11.98 0 005.95 1.586h.005c6.646 0 12.028-5.383 12.028-12.031S18.678 0 12.031 0zm0 21.915h-.004a9.98 9.98 0 01-5.08-1.38l-.364-.216-3.774.99.99-3.68-.237-.377a9.98 9.98 0 01-1.526-5.221C2.036 5.488 7.418.106 12.031.106c6.646 0 12.028 5.383 12.028 12.031s-5.382 11.778-12.028 11.778zm5.602-7.646c-.307-.154-1.817-.898-2.098-1.001-.281-.102-.486-.154-.69.154-.205.307-.793 1.001-.972 1.205-.179.205-.358.23-.665.077-.307-.154-1.296-.478-2.468-1.522-.912-.813-1.527-1.818-1.706-2.125-.179-.307-.019-.474.134-.628.138-.138.307-.358.461-.537.154-.179.205-.307.307-.512.102-.205.051-.384-.026-.537-.077-.154-.69-1.664-.947-2.278-.25-.6-.502-.518-.69-.528-.179-.01-.384-.01-.589-.01-.205 0-.537.077-.819.384-.281.307-1.075 1.05-1.075 2.56 0 1.51 1.1 2.969 1.254 3.174.154.205 2.168 3.308 5.25 4.638.733.316 1.305.505 1.751.646.736.233 1.406.2 1.933.12.588-.088 1.817-.742 2.073-1.46.256-.718.256-1.333.179-1.46-.077-.128-.281-.205-.588-.358z"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Horário de Funcionamento</label>
+            <input type="text" id="modal-hours" placeholder="Ex: Seg a Sex, 08h às 18h">
+        </div>
+        
+        <button class="btn-save-modal" id="btn-save-contact">Salvar Informações</button>
+    </div>
+</div>
+
 <script>
-    // --- ATENÇÃO: COLE O SEU LINK DO SHEETDB AQUI DENTRO DAS ASPAS ---
     const API_URL = "https://sheetdb.io/api/v1/9wia5qcdhjpv9"; 
-    // -----------------------------------------------------------------
 
     const categorias =[
         "Academia", "Açougue", "Adega", "Agência de viagens", "Água e gás", "Alfaiataria", "Antiquário", "Armarinho", 
@@ -328,14 +330,12 @@
         "Tintas", "Transportadora", "Vidraçaria"
     ];
 
-    // Lógica do Menu Suspenso Customizado (Dropdown)
     const categoryInput = document.getElementById('category-input');
     const categoryDropdown = document.getElementById('category-dropdown');
 
     function renderDropdown(filterText = '') {
         categoryDropdown.innerHTML = '';
         const lowerFilter = filterText.toLowerCase();
-        
         const filtered = categorias.filter(c => c.toLowerCase().includes(lowerFilter));
         
         if (filtered.length === 0) {
@@ -347,15 +347,12 @@
             const div = document.createElement('div');
             div.className = 'dropdown-item';
             div.textContent = c;
-            
             div.addEventListener('click', () => {
                 categoryInput.value = c;
                 categoryDropdown.classList.remove('show');
             });
-            
             categoryDropdown.appendChild(div);
         });
-        
         categoryDropdown.classList.add('show');
     }
 
@@ -368,13 +365,12 @@
         }
     });
 
-    // Lógica principal do sistema
     const form = document.getElementById('link-form');
     const submitBtn = document.getElementById('submit-btn');
     const listContainer = document.getElementById('links-list');
     const categoryFilter = document.getElementById('category-filter');
     
-    let allLinksData = []; // Variável global para armazenar todos os links do banco
+    let allLinksData =[]; 
 
     async function loadLinks() {
         try {
@@ -387,9 +383,9 @@
                 return;
             }
             
-            allLinksData = data; // Salva os dados globalmente
-            updateFilterDropdown(); // Atualiza as opções do filtro
-            applyFilter(); // Renderiza a lista aplicando o filtro atual
+            allLinksData = data; 
+            updateFilterDropdown(); 
+            applyFilter(); 
             
         } catch (error) {
             listContainer.innerHTML = '<span style="color: red;">Erro ao carregar. Verifique a URL do SheetDB.</span>';
@@ -397,16 +393,12 @@
         }
     }
 
-    // Função para atualizar as opções do filtro com base nas categorias existentes
     function updateFilterDropdown() {
-        const currentValue = categoryFilter.value; // Guarda o valor selecionado atualmente
-        
-        // Extrai categorias únicas da lista atual e as ordena alfabeticamente
+        const currentValue = categoryFilter.value; 
         const uniqueCategories = [...new Set(allLinksData.map(item => item.category))]
-                                 .filter(Boolean) // Remove vazios
+                                 .filter(Boolean) 
                                  .sort((a, b) => a.localeCompare(b, 'pt-BR'));
 
-        // Reconstrói o HTML do select
         categoryFilter.innerHTML = '<option value="ALL">Todas as categorias</option>';
         
         uniqueCategories.forEach(cat => {
@@ -416,7 +408,6 @@
             categoryFilter.appendChild(option);
         });
 
-        // Se a categoria que estava selecionada ainda existir, mantém ela selecionada
         if (uniqueCategories.includes(currentValue)) {
             categoryFilter.value = currentValue;
         } else {
@@ -424,7 +415,6 @@
         }
     }
 
-    // Função que filtra os dados e manda renderizar
     function applyFilter() {
         const filterValue = categoryFilter.value;
         let dataToRender = allLinksData;
@@ -432,12 +422,9 @@
         if (filterValue !== "ALL") {
             dataToRender = allLinksData.filter(item => item.category === filterValue);
         }
-
-        // Passa uma cópia do array para a função renderLinks (para não alterar o array original na ordenação)
         renderLinks([...dataToRender]);
     }
 
-    // Escuta mudanças no filtro
     categoryFilter.addEventListener('change', applyFilter);
 
     form.addEventListener('submit', async (e) => {
@@ -450,7 +437,7 @@
             name: document.getElementById('name-input').value,
             category: categoryInput.value,
             url: document.getElementById('url-input').value,
-            sold: document.getElementById('status-input').value // Salva: NORMAL, GREEN, GREEN_UNDERLINED, RED ou GOLD
+            sold: document.getElementById('status-input').value 
         };
 
         try {
@@ -470,33 +457,26 @@
         }
     });
 
-    // Variável para controlar o tempo de espera (5 segundos)
     let sortTimeout;
 
-    // Função que alterna entre as cores (Azul -> Verde -> Verde Sublinhado -> Vermelho -> Dourado -> Azul)
     window.toggleStatus = async function(id, currentStatus, element) {
-        
-        // Define a próxima cor na sequência solicitada
         let newStatus = "GREEN"; 
-        if (currentStatus === "NORMAL" || currentStatus === "FALSE") newStatus = "GREEN"; // Azul -> Verde
-        else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "GREEN_UNDERLINED"; // Verde -> Verde Sublinhado
-        else if (currentStatus === "GREEN_UNDERLINED") newStatus = "RED"; // Verde Sublinhado -> Vermelho
-        else if (currentStatus === "RED") newStatus = "GOLD"; // Vermelho -> Dourado
-        else if (currentStatus === "GOLD") newStatus = "NORMAL"; // Dourado -> Azul
+        if (currentStatus === "NORMAL" || currentStatus === "FALSE") newStatus = "GREEN"; 
+        else if (currentStatus === "GREEN" || currentStatus === "TRUE") newStatus = "GREEN_UNDERLINED"; 
+        else if (currentStatus === "GREEN_UNDERLINED") newStatus = "RED"; 
+        else if (currentStatus === "RED") newStatus = "GOLD"; 
+        else if (currentStatus === "GOLD") newStatus = "NORMAL"; 
         
-        // 1. Atualiza a cor visualmente de forma IMEDIATA
-        const linkTag = element.previousElementSibling; // Pega a tag <a> que está antes do botão da categoria
-        linkTag.className = "name-link"; // Reseta as classes de cor (fica Azul)
+        const linkTag = element.parentElement.querySelector('.name-link'); 
+        linkTag.className = "name-link"; 
         
         if (newStatus === "GREEN") linkTag.classList.add("green");
         else if (newStatus === "GREEN_UNDERLINED") linkTag.classList.add("green-underlined");
         else if (newStatus === "RED") linkTag.classList.add("red");
         else if (newStatus === "GOLD") linkTag.classList.add("gold");
         
-        // Atualiza o evento de clique para o novo status (caso o usuário clique várias vezes rápido)
         element.setAttribute("onclick", `toggleStatus('${id}', '${newStatus}', this)`);
 
-        // 2. Envia a atualização para o banco de dados em segundo plano
         try {
             fetch(`${API_URL}/id/${id}`, { 
                 method: 'PATCH', 
@@ -504,10 +484,9 @@
                 body: JSON.stringify({sold: newStatus}) 
             });
             
-            // 3. Inicia o cronômetro de 5 segundos para mover o link de lugar
-            clearTimeout(sortTimeout); // Limpa o cronômetro anterior se o usuário clicar rápido
+            clearTimeout(sortTimeout); 
             sortTimeout = setTimeout(() => {
-                loadLinks(); // Recarrega e reordena a lista após 5 segundos
+                loadLinks(); 
             }, 5000);
             
         } catch (error) {
@@ -529,7 +508,6 @@
         }
     };
 
-    // Função para atualizar os números na tela
     function updateCounters(total, blue, green, greenUnderlined, gold, red) {
         document.getElementById('count-total').textContent = total;
         document.getElementById('count-blue').textContent = blue;
@@ -548,70 +526,52 @@
             return;
         }
 
-        // --- LÓGICA DE ORDENAÇÃO POR COR E ORDEM ALFABÉTICA ---
         data.sort((a, b) => {
-            // 1º Critério: Ordem das Cores
             const getWeight = (status) => {
-                if (status === "GREEN" || status === "TRUE") return 2; // Verde
-                if (status === "GREEN_UNDERLINED") return 3; // Verde Sublinhado
-                if (status === "RED") return 4; // Vermelho
-                if (status === "GOLD") return 5; // Dourado
-                return 1; // Azul (NORMAL ou vazio)
+                if (status === "GREEN" || status === "TRUE") return 2; 
+                if (status === "GREEN_UNDERLINED") return 3; 
+                if (status === "RED") return 4; 
+                if (status === "GOLD") return 5; 
+                return 1; 
             };
             
             const weightA = getWeight(a.sold);
             const weightB = getWeight(b.sold);
             
-            if (weightA !== weightB) {
-                return weightA - weightB; // Ordena pela cor
-            }
+            if (weightA !== weightB) return weightA - weightB; 
             
-            // 2º Critério: Ordem Alfabética (se as cores forem iguais)
             const nameA = a.name ? a.name.toLowerCase() : "";
             const nameB = b.name ? b.name.toLowerCase() : "";
-            
-            return nameA.localeCompare(nameB, 'pt-BR'); // Ordena de A a Z respeitando acentos
+            return nameA.localeCompare(nameB, 'pt-BR'); 
         });
 
-        // Variáveis para a contagem
-        let countTotal = 0;
-        let countBlue = 0;
-        let countGreen = 0;
-        let countGreenUnderlined = 0;
-        let countGold = 0;
-        let countRed = 0;
+        let countTotal = 0, countBlue = 0, countGreen = 0, countGreenUnderlined = 0, countGold = 0, countRed = 0;
 
         data.forEach(item => {
             if(!item.name && !item.url) return; 
 
-            countTotal++; // Incrementa o total
+            countTotal++; 
             const status = item.sold || "NORMAL";
             
-            // Define qual classe de cor aplicar baseada no status e incrementa o contador correto
             let colorClass = "";
-            if (status === "GREEN" || status === "TRUE") {
-                colorClass = "green";
-                countGreen++;
-            } else if (status === "GREEN_UNDERLINED") {
-                colorClass = "green-underlined";
-                countGreenUnderlined++; // Agora conta separado
-            } else if (status === "GOLD") {
-                colorClass = "gold";
-                countGold++;
-            } else if (status === "RED") {
-                colorClass = "red";
-                countRed++;
-            } else {
-                // Se for NORMAL ou qualquer outra coisa não mapeada, conta como Azul
-                countBlue++;
-            }
+            if (status === "GREEN" || status === "TRUE") { colorClass = "green"; countGreen++; } 
+            else if (status === "GREEN_UNDERLINED") { colorClass = "green-underlined"; countGreenUnderlined++; } 
+            else if (status === "GOLD") { colorClass = "gold"; countGold++; } 
+            else if (status === "RED") { colorClass = "red"; countRed++; } 
+            else { countBlue++; }
 
             const div = document.createElement('div');
             div.className = 'link-item';
-            // Note que passamos "this" na função toggleStatus para podermos mudar a cor instantaneamente
+            
+            // Adicionado o ícone de telefone (SVG) ao lado do nome
             div.innerHTML = `
                 <div class="left-side">
-                    <a href="${item.url}" target="_blank" class="name-link ${colorClass}">${item.name}</a>
+                    <div class="name-wrapper">
+                        <a href="${item.url}" target="_blank" class="name-link ${colorClass}">${item.name}</a>
+                        <span class="contact-icon" onclick="openModal('${item.id}')" title="Informações de Contato">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        </span>
+                    </div>
                     <span class="category-tag" onclick="toggleStatus('${item.id}', '${status}', this)" title="Clique para mudar a cor">${item.category}</span>
                 </div>
                 <button class="btn-delete" onclick="deleteLink('${item.id}')">Excluir</button>
@@ -619,9 +579,87 @@
             listContainer.appendChild(div);
         });
 
-        // Atualiza os contadores na tela após processar todos os links
         updateCounters(countTotal, countBlue, countGreen, countGreenUnderlined, countGold, countRed);
     }
+
+    // --- LÓGICA DO MODAL DE CONTATO ---
+    let currentContactId = null;
+    const contactModal = document.getElementById('contact-modal');
+
+    function openModal(id) {
+        const item = allLinksData.find(link => link.id === id);
+        if (!item) return;
+
+        currentContactId = id;
+        document.getElementById('modal-title').textContent = `Contato - ${item.name}`;
+        
+        // Preenche os campos com os dados existentes (se houver)
+        document.getElementById('modal-contact-name').value = item.contactName || '';
+        document.getElementById('modal-fixed-phone').value = item.fixedPhone || '';
+        document.getElementById('modal-mobile-phone').value = item.mobilePhone || '';
+        document.getElementById('modal-hours').value = item.businessHours || '';
+
+        contactModal.classList.add('show');
+    }
+
+    function closeModal() {
+        contactModal.classList.remove('show');
+        currentContactId = null;
+    }
+
+    // Fecha o modal se clicar fora da caixa branca
+    contactModal.addEventListener('click', (e) => {
+        if (e.target === contactModal) closeModal();
+    });
+
+    function openWhatsApp() {
+        const mobile = document.getElementById('modal-mobile-phone').value;
+        const cleanNumber = mobile.replace(/\D/g, ''); // Remove tudo que não for número (parênteses, traços, espaços)
+        
+        if (cleanNumber.length >= 10) {
+            // Adiciona o 55 (Brasil) caso o usuário não tenha digitado
+            const finalNumber = cleanNumber.startsWith('55') ? cleanNumber : `55${cleanNumber}`;
+            window.open(`https://wa.me/${finalNumber}`, '_blank');
+        } else {
+            alert("Por favor, insira um número de celular válido com DDD.");
+        }
+    }
+
+    document.getElementById('btn-save-contact').addEventListener('click', async () => {
+        if (!currentContactId) return;
+
+        const btn = document.getElementById('btn-save-contact');
+        btn.textContent = "Salvando...";
+        btn.disabled = true;
+
+        const updatedData = {
+            contactName: document.getElementById('modal-contact-name').value,
+            fixedPhone: document.getElementById('modal-fixed-phone').value,
+            mobilePhone: document.getElementById('modal-mobile-phone').value,
+            businessHours: document.getElementById('modal-hours').value
+        };
+
+        try {
+            await fetch(`${API_URL}/id/${currentContactId}`, {
+                method: 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(updatedData)
+            });
+            
+            // Atualiza o array local para não precisar fazer um novo carregamento da API imediatamente
+            const itemIndex = allLinksData.findIndex(link => link.id === currentContactId);
+            if (itemIndex !== -1) {
+                allLinksData[itemIndex] = { ...allLinksData[itemIndex], ...updatedData };
+            }
+
+            closeModal();
+        } catch (error) {
+            alert("Erro ao salvar contato. Verifique sua conexão.");
+        } finally {
+            btn.textContent = "Salvar Informações";
+            btn.disabled = false;
+        }
+    });
 
     loadLinks();
 </script>
